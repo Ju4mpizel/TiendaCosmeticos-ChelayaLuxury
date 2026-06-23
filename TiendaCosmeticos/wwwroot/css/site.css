@@ -1,0 +1,470 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+    --blush: #FFF5F5;
+    --blush-dark: #FEE8E8;
+    --rose-gold: #E8B4B8;
+    --rose-gold-dark: #D4A0A4;
+    --rose-quartz: #F5D5D8;
+    --cream: #FFF8F3;
+    --ivory: #FFFBF7;
+    --taupe: #8B7E7A;
+    --chocolate: #4A3F3D;
+    --gold-accent: #C9A96E;
+    --gold-light: #F0E6CC;
+    --shadow-soft: 0 2px 16px rgba(74, 63, 61, 0.06);
+    --shadow-hover: 0 8px 30px rgba(74, 63, 61, 0.1);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+}
+
+body {
+    background-color: var(--ivory);
+    color: var(--chocolate);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, .font-elegant {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 600;
+    color: var(--chocolate);
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--chocolate) 0%, var(--rose-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navbar-chelya {
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--cream) 100%);
+    border-bottom: 1px solid var(--blush-dark);
+    box-shadow: 0 1px 12px rgba(74, 63, 61, 0.04);
+    padding: 0.6rem 0;
+}
+
+.navbar-chelya .nav-link {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--taupe);
+    padding: 0.5rem 1rem;
+    transition: color 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+.navbar-chelya .nav-link:hover {
+    color: var(--chocolate);
+}
+
+.navbar-chelya .nav-link i {
+    margin-right: 6px;
+    font-size: 1rem;
+}
+
+.navbar-chelya .btn-outline-chelya {
+    border: 1px solid var(--rose-gold);
+    color: var(--chocolate);
+    background: transparent;
+    border-radius: 20px;
+    padding: 0.4rem 1.2rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-chelya .btn-outline-chelya:hover {
+    background: linear-gradient(135deg, var(--rose-gold), var(--rose-quartz));
+    border-color: transparent;
+    color: #fff;
+}
+
+.navbar-chelya .btn-chelya {
+    background: linear-gradient(135deg, var(--rose-gold), var(--rose-quartz));
+    border: none;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0.4rem 1.2rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-chelya .btn-chelya:hover {
+    background: linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(232, 180, 184, 0.4);
+}
+
+.navbar-chelya .dropdown-menu {
+    border: 1px solid var(--blush-dark);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hover);
+    padding: 0.5rem;
+}
+
+.navbar-chelya .dropdown-item {
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--taupe);
+    transition: all 0.2s ease;
+}
+
+.navbar-chelya .dropdown-item:hover {
+    background: var(--blush);
+    color: var(--chocolate);
+}
+
+.navbar-chelya .dropdown-item i {
+    margin-right: 8px;
+    color: var(--rose-gold);
+}
+
+.hero-section {
+    background: linear-gradient(160deg, var(--cream) 0%, var(--blush) 40%, var(--ivory) 100%);
+    border-radius: var(--radius-lg);
+    padding: 4rem 2rem;
+    margin-top: 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(232, 180, 184, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(201, 169, 110, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    line-height: 1.15;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section p {
+    font-size: 1.1rem;
+    color: var(--taupe);
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--rose-gold), var(--gold-accent));
+    margin: 0.8rem auto 0;
+    border-radius: 2px;
+}
+
+.card-producto {
+    background: #FFFFFF;
+    border: 1px solid var(--blush-dark);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-soft);
+    height: 100%;
+}
+
+.card-producto:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--rose-quartz);
+}
+
+.card-producto .img-wrapper {
+    background: var(--blush);
+    border-radius: var(--radius-sm);
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--blush-dark);
+}
+
+.card-producto .img-wrapper img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.card-producto:hover .img-wrapper img {
+    transform: scale(1.05);
+}
+
+.card-producto .badge-categoria {
+    background: var(--gold-light);
+    color: var(--chocolate);
+    font-weight: 500;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.card-producto .precio {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--chocolate);
+}
+
+.btn-chelya {
+    background: linear-gradient(135deg, var(--rose-gold), var(--rose-quartz));
+    border: none;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.btn-chelya:hover {
+    background: linear-gradient(135deg, var(--rose-gold-dark), var(--rose-gold));
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(232, 180, 184, 0.4);
+}
+
+.btn-chelya-outline {
+    border: 1px solid var(--rose-gold);
+    color: var(--chocolate);
+    background: transparent;
+    border-radius: 20px;
+    padding: 0.5rem 1.4rem;
+    font-weight: 500;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-chelya-outline:hover {
+    background: var(--blush);
+    border-color: var(--rose-gold-dark);
+    color: var(--chocolate);
+}
+
+.btn-chelya-sm {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+}
+
+.card-elegant {
+    background: #FFFFFF;
+    border: 1px solid var(--blush-dark);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+}
+
+.card-elegant:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.form-chelya {
+    border: 1px solid var(--blush-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    background: #FFF;
+}
+
+.form-chelya:focus {
+    border-color: var(--rose-gold);
+    box-shadow: 0 0 0 3px rgba(232, 180, 184, 0.15);
+    outline: none;
+}
+
+label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--taupe);
+    letter-spacing: 0.3px;
+    margin-bottom: 0.3rem;
+}
+
+.tabla-chelya {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #FFFFFF;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--blush-dark);
+    box-shadow: var(--shadow-soft);
+}
+
+.tabla-chelya thead th {
+    background: linear-gradient(135deg, var(--cream), var(--blush));
+    color: var(--chocolate);
+    padding: 1rem 1.2rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--rose-quartz);
+}
+
+.tabla-chelya tbody td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--blush-dark);
+    color: var(--chocolate);
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.tabla-chelya tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.tabla-chelya tbody tr:hover {
+    background: var(--blush);
+}
+
+.badge-chelya {
+    background: var(--gold-light);
+    color: var(--chocolate);
+    font-weight: 500;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+}
+
+.badge-chelya-success {
+    background: linear-gradient(135deg, #D4EDDA, #C3E6CB);
+    color: #155724;
+}
+
+.badge-chelya-warning {
+    background: linear-gradient(135deg, #FFF3CD, #FFEAA7);
+    color: #856404;
+}
+
+.badge-chelya-danger {
+    background: linear-gradient(135deg, #F8D7DA, #F5C6CB);
+    color: #721C24;
+}
+
+.badge-chelya-secondary {
+    background: linear-gradient(135deg, #E2E3E5, #D6D8DB);
+    color: #383D41;
+}
+
+.cart-item {
+    border-bottom: 1px solid var(--blush-dark);
+    padding: 1.2rem 0;
+    transition: background 0.2s ease;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item:hover {
+    background: var(--blush);
+    border-radius: var(--radius-sm);
+}
+
+.footer-chelya {
+    background: linear-gradient(180deg, var(--ivory) 0%, var(--cream) 100%);
+    border-top: 1px solid var(--blush-dark);
+    color: var(--taupe);
+    font-size: 0.85rem;
+}
+
+.alert-chelya {
+    background: var(--blush);
+    border: 1px solid var(--rose-quartz);
+    color: var(--chocolate);
+    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
+}
+
+.divider-elegant {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--rose-gold), transparent);
+    margin: 1.5rem 0;
+}
+
+.total-section {
+    background: linear-gradient(135deg, var(--cream), var(--blush));
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.total-section .total-label {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.total-section .total-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--chocolate);
+}
+
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    .hero-section {
+        padding: 2.5rem 1.5rem;
+    }
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}
+
+.admin-nav-icon {
+    color: var(--rose-gold);
+    font-size: 1.1rem;
+}

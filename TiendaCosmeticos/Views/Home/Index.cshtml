@@ -1,0 +1,58 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.Producto>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="hero-section text-center my-4">
+    <h1 class="display-4 font-elegant mb-3">Siente tu Brillo Natural</h1>
+    <p class="lead">Descubre nuestra colección exclusiva de cosméticos en tonos pastel y texturas únicas pensadas para realzar tu belleza.</p>
+</div>
+
+<div class="text-center mb-5">
+    <h3 class="section-title">NUESTRO CATÁLOGO</h3>
+</div>
+
+<div class="row g-4">
+    @foreach (var producto in Model)
+    {
+        <div class="col-md-4">
+            <div class="card-producto d-flex flex-column">
+
+                <div class="img-wrapper mb-3">
+                    @if (!string.IsNullOrEmpty(producto.ImagenUrl))
+                    {
+                        <img src="@producto.ImagenUrl" alt="@producto.Nombre" />
+                    }
+                    else
+                    {
+                        <span style="color: var(--taupe); font-size: 0.85rem;"><i class="bi bi-image me-1"></i> Muestra Cosmético</span>
+                    }
+                </div>
+
+                <h5 class="font-elegant text-truncate mb-2" style="font-size: 1.1rem;">@producto.Nombre</h5>
+
+                <span class="badge-categoria align-self-start mb-2">
+                    @producto.Categoria?.Nombre
+                </span>
+
+                <p class="small text-muted flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    @producto.Descripcion
+                </p>
+
+                <hr class="divider-elegant my-3" />
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="precio">@producto.Precio.ToString("0.00") USD</span>
+
+                    <form asp-controller="Carrito" asp-action="Agregar" method="post" class="m-0">
+                        <input type="hidden" name="productoId" value="@producto.Id" />
+                        <input type="hidden" name="cantidad" value="1" />
+                        <button type="submit" class="btn btn-chelya btn-chelya-sm"><i class="bi bi-bag-plus me-1"></i> Añadir</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>

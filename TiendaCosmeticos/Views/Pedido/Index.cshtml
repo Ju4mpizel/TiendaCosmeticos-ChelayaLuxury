@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.Pedido>
+
+<div class="container my-4">
+    <h2 class="font-elegant mb-4" style="font-size: 1.6rem;"><i class="bi bi-journal-text me-2" style="color: var(--rose-gold);"></i> Control de Pedidos</h2>
+    <table class="tabla-chelya">
+        <thead>
+            <tr>
+                <th>Nro. Pedido</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ped in Model)
+            {
+                <tr>
+                    <td class="fw-semibold">#@ped.Id</td>
+                    <td>@ped.Usuario?.NombreCompleto</td>
+                    <td>@ped.FechaPedido.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="fw-semibold">@ped.Total.ToString("0.00") USD</td>
+                    <td>
+                        <span class="badge @(ped.Estado == "Pagado" ? "badge-chelya badge-chelya-success" : "badge-chelya badge-chelya-warning")">
+                            @ped.Estado
+                        </span>
+                    </td>
+                    <td>
+                        <a href="/DetallePedido/Index/@ped.Id" class="btn btn-chelya-outline btn-chelya-sm"><i class="bi bi-eye me-1"></i> Ver Productos</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

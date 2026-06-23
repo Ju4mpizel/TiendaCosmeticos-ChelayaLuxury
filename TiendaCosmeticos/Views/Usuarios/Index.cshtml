@@ -1,0 +1,43 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.Usuario>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="font-elegant" style="font-size: 1.6rem;"><i class="bi bi-people me-2" style="color: var(--rose-gold);"></i>Gestión de Usuarios</h2>
+        <a asp-action="Registro" class="btn btn-chelya"><i class="bi bi-person-plus me-1"></i> Nuevo Usuario</a>
+    </div>
+
+    <table class="tabla-chelya">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Correo Electrónico</th>
+                <th>Rol</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td class="fw-semibold">@user.NombreCompleto</td>
+                    <td class="text-muted">@user.Email</td>
+                    <td>
+                        <span class="badge-chelya">@user.Rol?.Nombre</span>
+                    </td>
+                    <td>
+                        @if (user.Activo)
+                        {
+                            <span class="badge-chelya badge-chelya-success">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="badge-chelya badge-chelya-secondary">Inactivo</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

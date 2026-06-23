@@ -1,0 +1,64 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.Producto>
+
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="font-elegant" style="font-size: 1.6rem;"><i class="bi bi-box-seam me-2" style="color: var(--rose-gold);"></i>Gestión de Productos</h2>
+        <a asp-action="Create" class="btn btn-chelya"><i class="bi bi-plus-circle me-1"></i> Nuevo Producto</a>
+    </div>
+
+    <table class="tabla-chelya">
+        <thead>
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prod in Model)
+            {
+                <tr>
+                    <td>
+                        <div style="width: 50px; height: 50px; background-color: var(--blush); border: 1px solid var(--blush-dark); border-radius: var(--radius-sm); overflow:hidden;" class="d-flex align-items-center justify-content-center">
+                            @if (!string.IsNullOrEmpty(prod.ImagenUrl))
+                            {
+                                <img src="@prod.ImagenUrl" style="max-width:100%; max-height:100%;" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-image" style="font-size: 0.9rem; color: var(--taupe);"></i>
+                            }
+                        </div>
+                    </td>
+                    <td class="fw-semibold">@prod.Nombre</td>
+                    <td><span class="badge-chelya">@prod.Categoria?.Nombre</span></td>
+                    <td class="fw-semibold">@prod.Precio.ToString("0.00") USD</td>
+                    <td>@prod.Stock u.</td>
+                    <td>
+                        @if (prod.Activo)
+                        {
+                            <span class="badge-chelya badge-chelya-success">Disponible</span>
+                        }
+                        else
+                        {
+                            <span class="badge-chelya badge-chelya-secondary">Descontinuado</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@prod.Id" class="btn btn-chelya-outline btn-chelya-sm"><i class="bi bi-pencil me-1"></i>Editar</a>
+                        @if (prod.Activo)
+                        {
+                            <form asp-action="Desactivar" asp-route-id="@prod.Id" method="post" class="d-inline m-0">
+                                <button type="submit" class="btn btn-chelya-outline btn-chelya-sm ms-1" style="border-color: #F5C6CB; color: #721C24;"><i class="bi bi-x-circle me-1"></i>Descontinuar</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

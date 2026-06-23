@@ -1,0 +1,127 @@
+-- ====================================================================
+-- 1. CREACIÓN DE LA BASE DE DATOS Y ESTRUCTURA
+-- ====================================================================
+CREATE DATABASE TiendaCosmeticosDB;
+GO
+USE TiendaCosmeticosDB;
+GO
+
+-- Tabla: Roles
+CREATE TABLE Roles (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Tabla: Usuarios
+CREATE TABLE Usuarios (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    NombreCompleto VARCHAR(150) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    PasswordHash VARCHAR(255) NOT NULL,
+    RolId INT NOT NULL,
+    Activo BIT NOT NULL DEFAULT 1, -- 1 = Activo, 0 = Inactivo
+    CONSTRAINT FK_Usuarios_Roles FOREIGN KEY (RolId) REFERENCES Roles(Id)
+);
+
+-- Tabla: Categorias
+CREATE TABLE Categorias (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL,
+    Descripcion VARCHAR(255) NULL,
+    Activo BIT NOT NULL DEFAULT 1 -- 1 = Visible, 0 = Oculta
+);
+
+-- Tabla: Productos
+CREATE TABLE Productos (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(150) NOT NULL,
+    Descripcion TEXT NULL,
+    Precio DECIMAL(18,2) NOT NULL,
+    Stock INT NOT NULL DEFAULT 0,
+    ImagenUrl VARCHAR(255) NULL,
+    CategoriaId INT NOT NULL,
+    Activo BIT NOT NULL DEFAULT 1, -- 1 = Disponible, 0 = Descontinuado
+    CONSTRAINT FK_Productos_Categorias FOREIGN KEY (CategoriaId) REFERENCES Categorias(Id)
+);
+
+-- Tabla: Pedidos
+CREATE TABLE Pedidos (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UsuarioId INT NOT NULL,
+    FechaPedido DATETIME NOT NULL DEFAULT GETDATE(),
+    Total DECIMAL(18,2) NOT NULL DEFAULT 0.00,
+    Estado VARCHAR(50) NOT NULL DEFAULT 'Pendiente', -- Pendiente, Pagado, Cancelado
+    CONSTRAINT FK_Pedidos_Usuarios FOREIGN KEY (UsuarioId) REFERENCES Usuarios(Id)
+);
+
+-- Tabla: DetallesPedido
+CREATE TABLE DetallesPedido (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    PedidoId INT NOT NULL,
+    ProductoId INT NOT NULL,
+    Cantidad INT NOT NULL,
+    PrecioUnitario DECIMAL(18,2) NOT NULL,
+    CONSTRAINT FK_DetallesPedido_Pedidos FOREIGN KEY (PedidoId) REFERENCES Pedidos(Id),
+    CONSTRAINT FK_DetallesPedido_Productos FOREIGN KEY (ProductoId) REFERENCES Productos(Id)
+);
+
+-- Tabla: Pagos
+CREATE TABLE Pagos (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    PedidoId INT NOT NULL,
+    PayPalTransactionId VARCHAR(100) NOT NULL,
+    FechaPago DATETIME NOT NULL DEFAULT GETDATE(),
+    Monto DECIMAL(18,2) NOT NULL,
+    EstadoPago VARCHAR(50) NOT NULL, -- Approved, Completed
+    CONSTRAINT FK_Pagos_Pedidos FOREIGN KEY (PedidoId) REFERENCES Pedidos(Id)
+);
+GO
+
+-- ====================================================================
+-- 2. INSERCIÓN DE DATOS SEMILLA (Seed Data)
+-- ====================================================================
+
+-- Insertar Roles Obligatorios
+INSERT INTO Roles (Nombre) VALUES ('Administrador'); -- Genera ID: 1
+INSERT INTO Roles (Nombre) VALUES ('Cliente');       -- Genera ID: 2
+
+-- Insertar Usuarios de Sistema Básicos
+INSERT INTO Usuarios (NombreCompleto, Email, PasswordHash, RolId, Activo) 
+VALUES ('Juan Pablo Admin', 'admin@glow.com', 'admin123', 1, 1);
+
+INSERT INTO Usuarios (NombreCompleto, Email, PasswordHash, RolId, Activo)
+VALUES ('Camila Fernandez', 'camila@gmail.com', 'cliente123', 2, 1); -- Genera ID: 2
+
+-- Insertar Categorías Unidas (Evita desfase de IDs)
+INSERT INTO Categorias (Nombre, Descripcion, Activo) VALUES 
+('Labiales', 'Labiales matte, brillos y delineadores.', 1),       -- ID: 1
+('Cuidado Facial', 'Cremas, tónicos y sérums para la piel.', 1),  -- ID: 2
+('Paletas de Sombras', 'Sombras de ojos con alta pigmentación.', 1),-- ID: 3
+('Bases y Correctores', 'Maquillaje de cobertura y contornos.', 1);-- ID: 4
+
+-- Insertar Productos de Prueba vinculados de forma exacta
+INSERT INTO Productos (Nombre, Descripcion, Precio, Stock, ImagenUrl, CategoriaId, Activo) VALUES 
+('Labial Matte Pastel Rose', 'Labial de larga duración textura suave hidratante.', 15.50, 45, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400', 1, 1), -- ID: 1
+('Sérum Hidratante Glow', 'Sérum con ácido hialurónico para un brillo natural diario.', 24.00, 20, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400', 2, 1), -- ID: 2
+('Paleta de Sombras Nude', '12 tonos pastel y neutros con alta pigmentación y fijación.', 32.00, 15, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
+('Corrector Líquido Luminous', 'Corrector de alta cobertura con acabado ligero y sedoso.', 18.50, 30, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1);
+
+-- ====================================================================
+-- 3. SIMULACIÓN DE HISTORIAL (Pedido Pagado)
+-- ====================================================================
+
+-- Creamos la orden principal vinculada al Usuario Cliente (ID: 2) por 39.50 USD
+INSERT INTO Pedidos (UsuarioId, FechaPedido, Total, Estado)
+VALUES (2, GETDATE(), 39.50, 'Pagado'); -- Genera PedidoId: 1
+
+-- Asociamos los productos exactos al detalle del pedido (15.50 + 24.00 = 39.50 USD)
+INSERT INTO DetallesPedido (PedidoId, ProductoId, Cantidad, PrecioUnitario)
+VALUES (1, 1, 1, 15.50); -- 1 unidad del Labial Matte Pastel Rose
+
+INSERT INTO DetallesPedido (PedidoId, ProductoId, Cantidad, PrecioUnitario)
+VALUES (1, 2, 1, 24.00); -- 1 unidad del Sérum Hidratante Glow
+
+-- Registramos el comprobante simulado de la transacción de PayPal
+INSERT INTO Pagos (PedidoId, PayPalTransactionId, Monto, EstadoPago, FechaPago)
+VALUES (1, 'PAYID-M123456789LOCALTEST', 39.50, 'Approved', GETDATE());
+GO

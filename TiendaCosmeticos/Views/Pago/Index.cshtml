@@ -1,0 +1,28 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.Pago>
+
+<div class="container my-4">
+    <h2 class="font-elegant mb-4" style="font-size: 1.6rem;"><i class="bi bi-credit-card me-2" style="color: var(--rose-gold);"></i> Historial de Transacciones</h2>
+    <table class="tabla-chelya">
+        <thead>
+            <tr>
+                <th>ID Pago</th>
+                <th>Nro. Pedido</th>
+                <th>Cliente</th>
+                <th>ID Transacción PayPal</th>
+                <th>Monto Recibido</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pago in Model)
+            {
+                <tr>
+                    <td>@pago.Id</td>
+                    <td class="fw-semibold">#@pago.PedidoId</td>
+                    <td>@pago.Pedido?.Usuario?.NombreCompleto</td>
+                    <td class="text-muted"><code>@pago.PayPalTransactionId</code></td>
+                    <td class="fw-semibold text-success">+ @pago.Monto.ToString("0.00") USD</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

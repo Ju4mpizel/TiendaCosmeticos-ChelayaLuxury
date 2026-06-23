@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TiendaCosmeticos.Models.DetallePedido>
+@{
+    var pedido = ViewBag.PedidoGeneral as TiendaCosmeticos.Models.Pedido;
+}
+
+<div class="container my-4" style="max-width: 800px;">
+    <div class="card-elegant p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 2px dashed var(--blush-dark);">
+            <div>
+                <h2 class="font-elegant m-0" style="font-size: 1.6rem;"><i class="bi bi-journal-text me-2" style="color: var(--rose-gold);"></i> Detalle de Orden</h2>
+                <small class="text-muted">Pedido Nro: #@(pedido?.Id)</small>
+            </div>
+            <a href="/Pedido/Index" class="btn btn-chelya-outline btn-chelya-sm"><i class="bi bi-arrow-left me-1"></i>Volver al Panel</a>
+        </div>
+
+        <div class="p-3 mb-4" style="background: linear-gradient(135deg, var(--cream), var(--blush)); border-radius: var(--radius-md);">
+            <p class="mb-1"><strong>Cliente:</strong> @(pedido?.Usuario?.NombreCompleto)</p>
+            <p class="mb-1"><strong>Correo:</strong> <span class="text-muted">@(pedido?.Usuario?.Email)</span></p>
+            <p class="mb-0"><strong>Fecha de Compra:</strong> @(pedido?.FechaPedido.ToString("dd/MM/yyyy HH:mm"))</p>
+        </div>
+
+        <table class="tabla-chelya mb-4">
+            <thead>
+                <tr>
+                    <th>Cosmético</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold">@item.Producto?.Nombre</td>
+                        <td>@item.PrecioUnitario.ToString("0.00") USD</td>
+                        <td>@item.Cantidad u.</td>
+                        <td class="fw-semibold text-success text-end">@((item.PrecioUnitario * item.Cantidad).ToString("0.00")) USD</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="total-section d-flex justify-content-end align-items-center gap-3">
+            <span class="total-label mb-0">Total Neto:</span>
+            <span class="total-value mb-0">@(pedido?.Total.ToString("0.00")) USD</span>
+        </div>
+
+    </div>
+</div>

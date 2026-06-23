@@ -1,0 +1,43 @@
+﻿@model TiendaCosmeticos.Models.Pedido
+
+<div class="container my-5" style="max-width: 500px;">
+    <div class="card-elegant p-4 text-center">
+        <i class="bi bi-credit-card" style="font-size: 3rem; color: var(--rose-gold);"></i>
+        <h3 class="font-elegant mb-3 mt-2">Finalizar Pago</h3>
+        <p class="text-muted mb-1">Pedido #@Model.Id</p>
+        <h2 class="font-elegant text-success mb-4" style="font-size: 2rem;">@Model.Total.ToString("0.00") USD</h2>
+
+        <div id="paypal-button-container"></div>
+    </div>
+</div>
+
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+
+<script>
+    paypal.Buttons({
+    createOrder: function(data, actions) {
+    return actions.order.create({
+    purchase_units: [{
+    amount: { value: '@Model.Total.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)' }
+    }]
+    });
+    },
+    onApprove: function(data, actions) {
+    return actions.order.capture().then(function(detallesPayPal) {
+
+    var idTransaccion = detallesPayPal.id;
+
+    fetch('/Pagos/RegistrarPagoExitoso', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'pedidoId=' + @Model.Id + '&transaccionId=' + idTransaccion
+    }).then(response => {
+    if (response.ok) {
+    alert('¡Pago Simulado de PayPal Exitoso!');
+    window.location.href = '/Home/Index';
+    }
+    });
+    });
+    }
+    }).render('#paypal-button-container');
+</script>
