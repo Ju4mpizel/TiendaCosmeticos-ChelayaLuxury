@@ -7,14 +7,16 @@
         <p class="text-muted mb-1">Pedido #@Model.Id</p>
         <h2 class="font-elegant text-success mb-4" style="font-size: 2rem;">@Model.Total.ToString("0.00") USD</h2>
 
+        @Html.AntiForgeryToken()
+
         <div id="paypal-button-container"></div>
     </div>
 </div>
 
 <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
-
 <script>
     paypal.Buttons({
+    // 1. CONFIGURA LA CANTIDAD EN EL ENTORNO DE PRUEBAS
     createOrder: function(data, actions) {
     return actions.order.create({
     purchase_units: [{
@@ -22,21 +24,54 @@
     }]
     });
     },
+
+    // 2. CAPTURA FONDOS CUANDO EL CLIENTE APRUEBA EL PAGO
     onApprove: function(data, actions) {
     return actions.order.capture().then(function(detallesPayPal) {
 
     var idTransaccion = detallesPayPal.id;
 
+    // Extraemos el token Antiforgery generado por @Html.AntiForgeryToken()
+    var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+    // Enviamos los datos al controlador mediante Fetch
     fetch('/Pagos/RegistrarPagoExitoso', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: 'pedidoId=' + @Model.Id + '&transaccionId=' + idTransaccion
+    // 🔑 Añadimos el token y el monto real aprobado en el body
+    body: 'pedidoId=' + @Model.Id +
+    '&transaccionId=' + idTransaccion +
+    '&monto=' + detallesPayPal.purchase_units[0].amount.value +
+    '&__RequestVerificationToken=' + encodeURIComponent(token)
     }).then(response => {
     if (response.ok) {
     alert('¡Pago Simulado de PayPal Exitoso!');
     window.location.href = '/Home/Index';
+    } else {
+    alert('Error al asentar el pago en el servidor.');
     }
     });
+    });
+    },
+
+    // 3. 🔑 EL ANTÍDOTO ANTICRASH CON CONTROL DE INVENTARIO
+    onError: function (err) {
+    console.error("PayPal de prueba interceptó un fallo o rechazo de tarjeta. Revirtiendo stock...", err);
+
+    // 🚀 FETCH DE EMERGENCIA: Mandamos a llamar a la acción para liberar el stock en la base de datos
+    fetch('/Pagos/CancelarPedido?pedidoId=' + @Model.Id, {
+    method: 'POST'
+    })
+    .then(response => {
+    // Notificamos al usuario de forma elegante sin colapsar el navegador
+    alert('❌ La simulación falló o fue cancelada. El pedido ha sido anulado y los cosméticos se reincorporaron al inventario.');
+
+    // Redirigimos de vuelta pacíficamente al carrito
+    window.location.href = '/Carrito/Index';
+    })
+    .catch(error => {
+    console.error("Error al procesar la cancelación en segundo plano:", error);
+    window.location.href = '/Carrito/Index';
     });
     }
     }).render('#paypal-button-container');

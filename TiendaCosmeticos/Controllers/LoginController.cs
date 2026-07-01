@@ -13,43 +13,39 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // 1. PANTALLA DE LOGIN (GET)
+        // Pagina de inicio de sesion, solo muestra el formulario vacio
         public IActionResult Index()
         {
             return View();
         }
 
-        // 2. PROCESO DE LOGUEARSE (POST)
+        // Procesa el intento de login: busca al usuario por correo y contraseña.
+        // Si existe y esta activo, guarda sus datos en sesion y lo manda a la tienda.
+        // Si falla, regresa al login con un mensaje de error
         [HttpPost]
         public IActionResult Ingresar(string correo, string password)
         {
-            // Buscamos si existe un usuario activo con ese correo y contraseña
             var usuarioEncontrado = _bd.Usuarios
                 .FirstOrDefault(u => u.Email == correo && u.PasswordHash == password && u.Activo == true);
 
             if (usuarioEncontrado != null)
             {
-                // ¡Éxito! Guardamos sus datos en la Sesión de la memoria web
                 HttpContext.Session.SetInt32("UsuarioId", usuarioEncontrado.Id);
                 HttpContext.Session.SetString("UsuarioNombre", usuarioEncontrado.NombreCompleto);
 
-                // Buscamos el nombre de su rol para saber si es Admin o Cliente
                 var rol = _bd.Roles.Find(usuarioEncontrado.RolId);
                 HttpContext.Session.SetString("UsuarioRol", rol?.Nombre ?? "Cliente");
 
-                // Lo mandamos a la tienda principal
                 return RedirectToAction("Index", "Home");
             }
 
-            // Si los datos están mal, volvemos al Login y le avisamos con un mensaje básico
             ViewBag.Error = "Correo o contraseña incorrectos.";
             return View("Index");
         }
 
-        // 3. CERRAR SESIÓN
+        // Cierra la sesion del usuario actual y lo regresa a la pagina principal
         public IActionResult Salir()
         {
-            // Borramos la memoria de la sesión y lo mandamos al inicio
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }

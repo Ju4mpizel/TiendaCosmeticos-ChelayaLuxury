@@ -7,14 +7,13 @@ namespace TiendaCosmeticos.Controllers
     public class CategoriasController : Controller
     {
         private readonly ApplicationDbContext _bd;
-
-        // El constructor solo sirve para conectar este archivo con la Base de Datos (_bd)
         public CategoriasController(ApplicationDbContext baseDatos)
         {
             _bd = baseDatos;
         }
 
-        // 🔒 Verifica que solo un Administrador pueda ejecutar estas acciones
+        // Valida que el usuario logueado tenga rol de Administrador.
+        // Si no cumple, lo redirige al login sin dejarle hacer nada
         private IActionResult? VerificarAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
@@ -25,20 +24,17 @@ namespace TiendaCosmeticos.Controllers
             return null;
         }
 
-        // 1. PANTALLA PRINCIPAL: Muestra la lista de categorías
+        // Lista todas las categorias registradas en el sistema
         public IActionResult Index()
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // Traemos la lista completa desde SQL Server
             var listaCategorias = _bd.Categorias.ToList();
-
-            // Se la mandamos a la vista para que la dibuje en la pantalla
             return View(listaCategorias);
         }
 
-        // 2. FORMULARIO DE CREAR (Petición GET: Solo muestra la pantalla en blanco)
+        // Muestra el formulario vacio para crear una categoria nueva
         public IActionResult Create()
         {
             var auth = VerificarAdmin();
@@ -47,20 +43,20 @@ namespace TiendaCosmeticos.Controllers
             return View();
         }
 
-        // 3. BOTÓN DE GUARDAR (Petición POST: Recibe lo que el usuario escribió)
+        // Guarda la categoria que el admin acaba de escribir
         [HttpPost]
         public IActionResult Create(Categoria nuevaCategoria)
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            _bd.Categorias.Add(nuevaCategoria); // Lo preparamos en la lista
-            _bd.SaveChanges();                  // ¡Lo guardamos en SQL Server!
+            _bd.Categorias.Add(nuevaCategoria);
+            _bd.SaveChanges();
 
-            return RedirectToAction("Index");   // Volvemos a la lista principal
+            return RedirectToAction("Index");
         }
 
-        // 4. FORMULARIO DE EDITAR (Busca la categoría vieja y la muestra para cambiar datos)
+        // Carga el formulario de edicion con los datos de la categoria seleccionada
         public IActionResult Edit(int id)
         {
             var auth = VerificarAdmin();
@@ -71,20 +67,21 @@ namespace TiendaCosmeticos.Controllers
             return View(categoriaEncontrada);
         }
 
-        // 5. BOTÓN DE ACTUALIZAR (Guarda los cambios de la edición)
+        // Aplica los cambios que el admin le hizo a la categoria
         [HttpPost]
         public IActionResult Edit(Categoria categoriaModificada)
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            _bd.Categorias.Update(categoriaModificada); // Indicamos que se modificó
-            _bd.SaveChanges();                          // Guardamos en SQL Server
+            _bd.Categorias.Update(categoriaModificada);
+            _bd.SaveChanges();
 
             return RedirectToAction("Index");
         }
 
-        // 6. BOTÓN DE ELIMINAR LÓGICO (Desactivar)
+        // Desactiva una categoria en lugar de borrarla de la base de datos
+        // Asi no se pierde el historial de productos que tenian esa categoria
         [HttpPost]
         public IActionResult Desactivar(int id)
         {
@@ -95,7 +92,7 @@ namespace TiendaCosmeticos.Controllers
 
             if (categoria != null)
             {
-                categoria.Activo = false; // Cambiamos el interruptor a falso (Borrado lógico)
+                categoria.Activo = false;
                 _bd.Categorias.Update(categoria);
                 _bd.SaveChanges();
             }

@@ -13,7 +13,7 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // 🔒 Verifica que solo un Administrador pueda ejecutar estas acciones
+        // Valida que solo un Administrador pueda ver los pedidos
         private IActionResult? VerificarAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
@@ -24,14 +24,13 @@ namespace TiendaCosmeticos.Controllers
             return null;
         }
 
-        // 1. LEER PEDIDOS (Index)
-        // Muestra en una tabla del Dashboard todas las órdenes de compra de la tienda
+        // Lista todas las ordenes de compra que se han generado en la tienda,
+        // incluyendo el cliente que las hizo. Sirve como panel de control para el admin
         public IActionResult Index()
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // .Include(p => p.Usuario) une el pedido con el cliente para saber quién compró
             var listaPedidos = _bd.Pedidos.Include(p => p.Usuario).ToList();
             return View(listaPedidos);
         }

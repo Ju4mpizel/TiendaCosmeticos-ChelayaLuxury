@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore; // Necesario para el .Include
+using Microsoft.EntityFrameworkCore;
 using TiendaCosmeticos.Data;
 using TiendaCosmeticos.Models;
 
@@ -15,7 +15,7 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // 🔒 Verifica que solo un Administrador pueda ejecutar estas acciones
+        // Valida que solo un Administrador pueda gestionar productos
         private IActionResult? VerificarAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
@@ -26,33 +26,32 @@ namespace TiendaCosmeticos.Controllers
             return null;
         }
 
-        // 1. PANTALLA PRINCIPAL: Lista los productos con el nombre de su categoría
+        // Lista todos los productos con el nombre de su categoria en lugar del ID,
+        // asi el admin ve la informacion completa de una sola pasada
         public IActionResult Index()
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // .Include(p => p.Categoria) une la tabla Producto con Categoría (como un JOIN en SQL)
             var listaProductos = _bd.Productos.Include(p => p.Categoria).ToList();
             return View(listaProductos);
         }
 
-        // 2. FORMULARIO DE CREAR (GET: Pantalla en blanco con el desplegable)
+        // Muestra el formulario para agregar un nuevo producto,
+        // con un desplegable de categorias activas para elegir
         public IActionResult Create()
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // Buscamos las categorías que no estén ocultas
             var categoriasActivas = _bd.Categorias.Where(c => c.Activo == true).ToList();
 
-            // Guardamos la lista en el "ViewBag" configurando: (Lista, lo que se guarda, lo que el usuario lee)
             ViewBag.CategoriasDisponibles = new SelectList(categoriasActivas, "Id", "Nombre");
 
             return View();
         }
 
-        // 3. BOTÓN DE GUARDAR (POST: Recibe el cosmético lleno)
+        // Guarda el producto nuevo en la base de datos
         [HttpPost]
         public IActionResult Create(Producto nuevoProducto)
         {
@@ -64,7 +63,8 @@ namespace TiendaCosmeticos.Controllers
             return RedirectToAction("Index");
         }
 
-        // 4. FORMULARIO DE EDITAR (Busca el producto y vuelve a armar el desplegable)
+        // Carga el formulario de edicion con los datos del producto
+        // y preselecciona la categoria que ya tenia asignada
         public IActionResult Edit(int id)
         {
             var auth = VerificarAdmin();
@@ -75,13 +75,12 @@ namespace TiendaCosmeticos.Controllers
             if (productoEncontrado == null) return NotFound();
 
             var categoriasActivas = _bd.Categorias.Where(c => c.Activo == true).ToList();
-            // El último parámetro le dice al desplegable cuál es la categoría que ya tenía este producto
             ViewBag.CategoriasDisponibles = new SelectList(categoriasActivas, "Id", "Nombre", productoEncontrado.CategoriaId);
 
             return View(productoEncontrado);
         }
 
-        // 5. BOTÓN DE ACTUALIZAR (Guarda los cambios de la edición)
+        // Aplica los cambios que el admin le hizo al producto
         [HttpPost]
         public IActionResult Edit(Producto productoModificado)
         {
@@ -93,7 +92,8 @@ namespace TiendaCosmeticos.Controllers
             return RedirectToAction("Index");
         }
 
-        // 6. BOTÓN DE ELIMINAR LÓGICO (Desactivar)
+        // Desactiva un producto en lugar de borrarlo permanentemente.
+        // Asi el historico de pedidos que lo incluyen no se pierde
         [HttpPost]
         public IActionResult Desactivar(int id)
         {

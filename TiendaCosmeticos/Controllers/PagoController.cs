@@ -13,7 +13,7 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // 🔒 Verifica que solo un Administrador pueda ejecutar estas acciones
+        // Valida que solo un Administrador pueda acceder a estas pantallas
         private IActionResult? VerificarAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
@@ -24,16 +24,13 @@ namespace TiendaCosmeticos.Controllers
             return null;
         }
 
-        // 1. LEER HISTORIAL DE PAGOS (Index)
-        // Genera un reporte completo cruzando datos de tres tablas
+        // Muestra el historial completo de pagos registrados en el sistema.
+        // Incluye datos del pedido y del usuario que hizo la compra para tener contexto
         public IActionResult Index()
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // Explicación para el grupo:
-            // .Include(p => p.Pedido) jala los datos de la compra
-            // .ThenInclude(ped => ped.Usuario) jala los datos del cliente que pagó
             var listaPagos = _bd.Pagos
                 .Include(p => p.Pedido)
                     .ThenInclude(ped => ped.Usuario)

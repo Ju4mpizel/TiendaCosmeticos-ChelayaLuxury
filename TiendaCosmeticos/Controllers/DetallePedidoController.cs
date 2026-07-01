@@ -13,7 +13,7 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // 🔒 Verifica que solo un Administrador pueda ejecutar estas acciones
+        // Valida que solo un Administrador pueda entrar a esta seccion
         private IActionResult? VerificarAdmin()
         {
             var rol = HttpContext.Session.GetString("UsuarioRol");
@@ -24,21 +24,18 @@ namespace TiendaCosmeticos.Controllers
             return null;
         }
 
-        // 1. LEER DETALLES DE UN PEDIDO (Index)
-        // Recibe el ID del pedido que el administrador seleccionó
+        // Muestra el detalle de un pedido especifico: que productos compro,
+        // en que cantidad, a que precio, y quien fue el cliente
         public IActionResult Index(int id)
         {
             var auth = VerificarAdmin();
             if (auth != null) return auth;
 
-            // Buscamos solo los renglones que correspondan a ese número de pedido
-            // .Include(d => d.Producto) nos da acceso al Nombre y Precio del cosmético
             var listaDetalles = _bd.DetallesPedido
                 .Where(d => d.PedidoId == id)
                 .Include(d => d.Producto)
                 .ToList();
 
-            // Guardamos el pedido general para mostrar el Total de la compra arriba en la pantalla
             var pedidoGeneral = _bd.Pedidos.Include(p => p.Usuario).FirstOrDefault(p => p.Id == id);
             ViewBag.PedidoGeneral = pedidoGeneral;
 

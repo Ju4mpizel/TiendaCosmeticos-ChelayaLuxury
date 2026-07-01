@@ -1,6 +1,8 @@
 -- ====================================================================
--- 1. CREACIÓN DE LA BASE DE DATOS Y ESTRUCTURA
+-- 1. CREACIÓN DE LA BASE DE DATOS Y ESTRUCTURA (Idéntica a la original)
 -- ====================================================================
+DROP DATABASE IF EXISTS TiendaCosmeticosDB;
+GO
 CREATE DATABASE TiendaCosmeticosDB;
 GO
 USE TiendaCosmeticosDB;
@@ -85,41 +87,133 @@ GO
 INSERT INTO Roles (Nombre) VALUES ('Administrador'); -- Genera ID: 1
 INSERT INTO Roles (Nombre) VALUES ('Cliente');       -- Genera ID: 2
 
--- Insertar Usuarios de Sistema Básicos
+-- 1 Administrador Obligatorio
 INSERT INTO Usuarios (NombreCompleto, Email, PasswordHash, RolId, Activo) 
 VALUES ('Juan Pablo Admin', 'admin@glow.com', 'admin123', 1, 1);
 
-INSERT INTO Usuarios (NombreCompleto, Email, PasswordHash, RolId, Activo)
-VALUES ('Camila Fernandez', 'camila@gmail.com', 'cliente123', 2, 1); -- Genera ID: 2
+-- 30 Usuarios Clientes de Prueba (Mantenemos a Camila Fernandez con ID 2)
+INSERT INTO Usuarios (NombreCompleto, Email, PasswordHash, RolId, Activo) VALUES
+('Camila Fernandez', 'camila@gmail.com', 'cliente123', 2, 1), -- Genera ID: 2
+('Mateo Silva', 'mateo.silva@example.com', 'user123', 2, 1),
+('Sofía Mendoza', 'sofia.mendo@example.com', 'user123', 2, 1),
+('Lucas Ortega', 'lucas.ort@example.com', 'user123', 2, 1),
+('Valentina Ríos', 'valen.rios@example.com', 'user123', 2, 1),
+('Diego Calizaya', 'diego.cali@example.com', 'user123', 2, 1),
+('Lucía Vargas', 'lucia.vargas@example.com', 'user123', 2, 1),
+('Benjamín Flores', 'benja.fl@example.com', 'user123', 2, 1),
+('María René Rocha', 'maria.rocha@example.com', 'user123', 2, 1),
+('Nicolás Mamani', 'nico.mama@example.com', 'user123', 2, 1),
+('Isabella Castro', 'isa.castro@example.com', 'user123', 2, 1),
+('Samuel Choque', 'samuel.ch@example.com', 'user123', 2, 1),
+('Gabriela Benítez', 'gaby.b@example.com', 'user123', 2, 1),
+('Alejandro Suárez', 'ale.suarez@example.com', 'user123', 2, 1),
+('Daniela Guzmán', 'dani.guzman@example.com', 'user123', 2, 1),
+('Andrés Mitre', 'andres.mitre@example.com', 'user123', 2, 1),
+('Natalia Torrico', 'natalia.t@example.com', 'user123', 2, 1),
+('Sebastián Rojas', 'sebas.rojas@example.com', 'user123', 2, 1),
+('Camila Antelo', 'camila.ant@example.com', 'user123', 2, 1),
+('Matías Baldivieso', 'matias.b@example.com', 'user123', 2, 1),
+('Flavia Claros', 'flavia.claros@example.com', 'user123', 2, 1),
+('Joaquín Ledezma', 'joaco.ledez@example.com', 'user123', 2, 1),
+('Fernanda Melgar', 'fer.melgar@example.com', 'user123', 2, 1),
+('Rodrigo Pinto', 'rodrigo.pinto@example.com', 'user123', 2, 1),
+('Valeria Soliz', 'vale.soliz@example.com', 'user123', 2, 1),
+('Gabriel Ticona', 'gabo.ticona@example.com', 'user123', 2, 1),
+('Andrea Villarroel', 'andrea.villa@example.com', 'user123', 2, 1),
+('Leonardo Claure', 'leo.claure@example.com', 'user123', 2, 1),
+('Paula Encinas', 'paula.encinas@example.com', 'user123', 2, 1),
+('Santiago Arce', 'santi.arce@example.com', 'user123', 2, 1);
 
--- Insertar Categorías Unidas (Evita desfase de IDs)
+-- Categorías Expandidas (Tus 4 originales + 3 nuevas estratégicas)
 INSERT INTO Categorias (Nombre, Descripcion, Activo) VALUES 
-('Labiales', 'Labiales matte, brillos y delineadores.', 1),       -- ID: 1
-('Cuidado Facial', 'Cremas, tónicos y sérums para la piel.', 1),  -- ID: 2
-('Paletas de Sombras', 'Sombras de ojos con alta pigmentación.', 1),-- ID: 3
-('Bases y Correctores', 'Maquillaje de cobertura y contornos.', 1);-- ID: 4
+('Labiales', 'Labiales matte, brillos y delineadores.', 1),        -- ID: 1
+('Cuidado Facial', 'Cremas, tónicos y sérums para la piel.', 1),   -- ID: 2
+('Paletas de Sombras', 'Sombras de ojos con alta pigmentación.', 1), -- ID: 3
+('Bases y Correctores', 'Maquillaje de cobertura y contornos.', 1), -- ID: 4
+('Esmaltes y Uñas', 'Cuidado, color y diseño para manicura.', 1),   -- ID: 5
+('Brochas y Accesorios', 'Herramientas esenciales de aplicación.', 1),-- ID: 6
+('Perfumes', 'Fragancias delicadas y colonias suaves.', 1);         -- ID: 7
 
--- Insertar Productos de Prueba vinculados de forma exacta
+-- 50 Productos de Prueba vinculados de forma exacta a sus categorías
 INSERT INTO Productos (Nombre, Descripcion, Precio, Stock, ImagenUrl, CategoriaId, Activo) VALUES 
+-- Categoría 1: Labiales (1-7)
 ('Labial Matte Pastel Rose', 'Labial de larga duración textura suave hidratante.', 15.50, 45, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400', 1, 1), -- ID: 1
+('Gloss Voluminizador Glow', 'Brillo labial con efecto de volumen inmediato y destellos.', 12.00, 30, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 1, 1),
+('Labial Líquido Red Velvet', 'Acabado ultramatte, no se transfiere, color rojo intenso.', 16.00, 25, 'https://images.unsplash.com/photo-1625093742435-6fa192b6fb10?q=80&w=400', 1, 1),
+('Bálsamo Labial de Coco', 'Hidratación profunda de uso diario con aroma natural a coco.', 6.50, 100, 'https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=400', 1, 1),
+('Delineador de Labios Nude', 'Trazo preciso y suave para definir la silueta del labial.', 8.00, 50, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 1, 1),
+('Tinta de Labios Cherry Cream', 'Efecto natural de larga duración que humecta sutilmente.', 11.50, 40, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400', 1, 1),
+('Labial Satinado Peach Shimmer', 'Textura cremosa con acabado luminoso y destellos durazno.', 14.00, 20, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 1, 1),
+
+-- Categoría 2: Cuidado Facial (8-15)
 ('Sérum Hidratante Glow', 'Sérum con ácido hialurónico para un brillo natural diario.', 24.00, 20, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400', 2, 1), -- ID: 2
-('Paleta de Sombras Nude', '12 tonos pastel y neutros con alta pigmentación y fijación.', 32.00, 15, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
-('Corrector Líquido Luminous', 'Corrector de alta cobertura con acabado ligero y sedoso.', 18.50, 30, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1);
+('Crema Hidratante Aloe Vera', 'Fórmula ligera en gel que calma y refresca el rostro.', 19.50, 35, 'https://images.unsplash.com/photo-1608248597481-496100c8c836?q=80&w=400', 2, 1),
+('Tónico Facial de Rosas', 'Balancea el pH de la piel dejándola suave y fresca.', 13.00, 40, 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=400', 2, 1),
+('Protector Solar Facial FPS 50', 'Fórmula toque seco, ideal para usar antes del maquillaje.', 22.50, 60, 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=400', 2, 1),
+('Mascarilla de Arcilla Verde', 'Purifica los poros profundamente y controla el brillo.', 15.00, 25, 'https://images.unsplash.com/photo-1567894192231-d22d9c1349b0?q=80&w=400', 2, 1),
+('Agua Micelar Desmaquillante', 'Remueve maquillaje a prueba de agua con suavidad.', 10.50, 55, 'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?q=80&w=400', 2, 1),
+('Crema Contorno de Ojos C', 'Reduce líneas de expresión y ojeras con vitamina C.', 26.00, 15, 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=400', 2, 1),
+('Exfoliante Facial de Café', 'Remueve células muertas activando la circulación del rostro.', 14.50, 30, 'https://images.unsplash.com/photo-1608248597481-496100c8c836?q=80&w=400', 2, 1),
+
+-- Categoría 3: Paletas de Sombras (16-22)
+('Paletas de Sombras Nude', '12 tonos pastel y neutros con alta pigmentación y fijación.', 32.00, 15, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
+('Paleta Neon Brights', '8 tonos vibrantes ideales para looks artísticos y modernos.', 28.50, 12, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400', 3, 1),
+('Sombras Individuales Glitter', 'Brillo puro prensado de fácil aplicación sobre el párpado.', 7.00, 80, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
+('Paleta Warm Sunset', 'Tonos tierra cálidos, dorados y bronce perfectos para la noche.', 35.00, 18, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400', 3, 1),
+('Sombra Líquida Holográfica', 'Efecto duocromo metálico de secado rápido y larga duración.', 13.50, 24, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
+('Paleta Pastel Dreams', 'Tonos lila, menta y rosa suaves de acabado mate tierno.', 29.90, 20, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400', 3, 1),
+('Prebase de Sombras Longwear', 'Intensifica el color de las sombras y evita pliegues.', 11.00, 35, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 3, 1),
+
+-- Categoría 4: Bases y Correctores (23-29)
+('Corrector Líquido Luminous', 'Corrector de alta cobertura con acabado ligero y sedoso.', 18.50, 30, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+('Base Matte Fluid Light', 'Base fluida de cobertura media con acabado mate natural.', 25.00, 40, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+('Polvo Traslúcido Antibrillo', 'Sella el maquillaje sin aportar peso ni texturas secas.', 16.50, 45, 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400', 4, 1),
+('Primer Facial Perfeccionador', 'Suaviza la textura de la piel minimizando poros abiertos.', 19.00, 28, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+('Paleta de Contorno en Crema', '4 tonos para esculpir e iluminar las facciones del rostro.', 22.00, 15, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+('Rubor en Crema Soft Pink', 'Aporta un color natural y saludable a las mejillas.', 14.00, 32, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+('Iluminador Líquido Champagne', 'Brillo perlado concentrado reflectante para pómulos.', 17.50, 25, 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400', 4, 1),
+
+-- Categoría 5: Esmaltes y Uñas (30-36)
+('Esmalte Pastel Mint', 'Esmalte de secado rápido color verde menta tierno.', 6.00, 60, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Esmalte Bubblegum Pink', 'Tono rosa clásico vibrante de alta duración y brillo.', 6.00, 55, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Top Coat Efecto Gel', 'Capa protectora que prolonga el esmalte con brillo espejo.', 9.50, 40, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Aceite de Cutículas Almendras', 'Hidrata y fortalece el contorno de la uña maltratada.', 7.50, 30, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Quitaesmalte Sin Acetona', 'Fórmula suave enriquecida que no reseca las uñas.', 5.00, 70, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Esmalte Base Fortalecedora', 'Previene el quiebre de uñas quebradizas con keratina.', 8.00, 45, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+('Esmalte Lavanda Serene', 'Tono lavanda pastel sutil ideal para un estilo limpio.', 6.00, 48, 'https://images.unsplash.com/photo-1604654894610-df63bc536371?q=80&w=400', 5, 1),
+
+-- Categoría 6: Brochas y Accesorios (37-43)
+('Set de Brochas Pastel (10 pzs)', 'Brochas de cerdas sintéticas ultra suaves color rosa.', 38.00, 15, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Esponja de Maquillaje Blender', 'Crecimiento al contacto con agua, difuminado perfecto.', 5.50, 90, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Brocha para Base Kabuki', 'Cerdas densas perfectas para aplicar bases fluidas.', 12.50, 35, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Rizador de Pestañas Ergonómico', 'Curvatura ideal con almohadilla de silicona protectora.', 8.50, 40, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Limpiador de Brochas en Gel', 'Remueve residuos cosméticos y bacterias eficazmente.', 10.00, 25, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Brocha Difuminadora de Ojos', 'Brocha fina indispensable para transiciones de sombras.', 6.00, 60, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+('Manta Organizadora de Brochas', 'Manta de ecocuero para guardar y proteger herramientas.', 16.00, 12, 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400', 6, 1),
+
+-- Categoría 7: Perfumes (44-50)
+('Colonia Soft Vanilla', 'Fragancia dulce de vainilla y toques ligeros de azúcar.', 22.00, 25, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Eau de Parfum Jasmine Dreams', 'Aroma floral elegante a jazmines, rosas y sándalo.', 45.00, 10, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Perfume Corporal Citrus Fresh', 'Bruma refrescante frutal de naranja dulce y limón.', 15.00, 35, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Mini Perfume de Cartera Rosas', 'Presentación compacta ideal para retoques rápidos.', 9.90, 50, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Eau de Parfum Sweet Berries', 'Fragancia juvenil frutal con base de moras y frambuesa.', 38.00, 14, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Perfume Unisex Aqua Marine', 'Fragancia fresca y sutil inspirada en la brisa marina.', 42.00, 8, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1),
+('Colonia Relajante de Lavanda', 'Aroma suave ideal para usar después de la ducha nocturna.', 18.00, 30, 'https://images.unsplash.com/photo-1541643600914-78b084683601?q=80&w=400', 7, 1);
 
 -- ====================================================================
--- 3. SIMULACIÓN DE HISTORIAL (Pedido Pagado)
+-- 3. SIMULACIÓN DE HISTORIAL (Pedido Pagado Obligatorio - ID 1)
 -- ====================================================================
 
--- Creamos la orden principal vinculada al Usuario Cliente (ID: 2) por 39.50 USD
+-- Creamos la orden principal vinculada al Usuario Cliente Camila Fernandez (ID: 2) por 39.50 USD
 INSERT INTO Pedidos (UsuarioId, FechaPedido, Total, Estado)
 VALUES (2, GETDATE(), 39.50, 'Pagado'); -- Genera PedidoId: 1
 
 -- Asociamos los productos exactos al detalle del pedido (15.50 + 24.00 = 39.50 USD)
 INSERT INTO DetallesPedido (PedidoId, ProductoId, Cantidad, PrecioUnitario)
-VALUES (1, 1, 1, 15.50); -- 1 unidad del Labial Matte Pastel Rose
+VALUES (1, 1, 1, 15.50); -- 1 unidad del Labial Matte Pastel Rose (ID: 1)
 
 INSERT INTO DetallesPedido (PedidoId, ProductoId, Cantidad, PrecioUnitario)
-VALUES (1, 2, 1, 24.00); -- 1 unidad del Sérum Hidratante Glow
+VALUES (1, 8, 1, 24.00); -- 1 unidad del Sérum Hidratante Glow (Ahora es ID: 8)
 
 -- Registramos el comprobante simulado de la transacción de PayPal
 INSERT INTO Pagos (PedidoId, PayPalTransactionId, Monto, EstadoPago, FechaPago)
