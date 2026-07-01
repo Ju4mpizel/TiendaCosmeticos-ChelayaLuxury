@@ -14,8 +14,8 @@ namespace TiendaCosmeticos.Controllers
             _bd = baseDatos;
         }
 
-        // Lee el carrito desde la sesion del usuario.
-        // Si no hay nada guardado, devuelve una lista vacia para empezar de cero
+        //Lee el carrito desde la sesion del usuario.
+        //Si no hay nada guardado, devuelve una lista vacia para empezar de cero
         private List<CarritoItem> ObtenerCarritoDeSesion()
         {
             var carritoJson = HttpContext.Session.GetString("Carrito");
@@ -26,8 +26,8 @@ namespace TiendaCosmeticos.Controllers
             return JsonSerializer.Deserialize<List<CarritoItem>>(carritoJson)!;
         }
 
-        // Guarda el carrito actual en la sesion serializado como JSON.
-        // Se llama despues de cualquier cambio (agregar, quitar, etc.)
+        //Guarda el carrito actual en la sesion serializado como JSON.
+        //Se llama despues de cualquier cambio (agregar, quitar, etc.)
         private void GuardarCarritoEnSesion(List<CarritoItem> carrito)
         {
             var carritoJson = JsonSerializer.Serialize(carrito);
@@ -73,7 +73,7 @@ namespace TiendaCosmeticos.Controllers
             return RedirectToAction("Index");
         }
 
-        // Quita un producto completo del carrito, no solo una unidad
+        //Quita un producto completo del carrito, no solo una unidad
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Eliminar(int productoId)
@@ -90,8 +90,8 @@ namespace TiendaCosmeticos.Controllers
             return RedirectToAction("Index");
         }
 
-        // Convierte el carrito en un pedido real en la base de datos.
-        // Por cada producto en el carrito descuenta el stock correspondiente.
+        //Convierte el carrito en un pedido real en la base de datos
+        //Por cada producto en el carrito descuenta el stock correspondiente
         // Requiere que el usuario haya iniciado sesion, si no, lo redirige al login
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -117,8 +117,8 @@ namespace TiendaCosmeticos.Controllers
             _bd.Pedidos.Add(nuevoPedido);
             _bd.SaveChanges();
 
-            // Guardamos cada producto del carrito como detalle del pedido
-            // y aprovechamos para descontar el stock en la misma pasada
+            //Guardamos cada producto del carrito como detalle del pedido
+            //y aprovechamos para descontar el stock en la misma pasada
             foreach (var item in carrito)
             {
                 var detalle = new DetallePedido
@@ -135,7 +135,7 @@ namespace TiendaCosmeticos.Controllers
                 {
                     productoBD.Stock -= item.Cantidad;
 
-                    // Seguro por si se vende mas de lo que hay en teoria
+                    //Seguro por si se vende mas de lo que hay en teoria
                     if (productoBD.Stock < 0)
                     {
                         productoBD.Stock = 0;

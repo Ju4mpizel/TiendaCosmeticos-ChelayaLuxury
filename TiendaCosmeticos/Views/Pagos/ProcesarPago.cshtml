@@ -33,12 +33,9 @@
 
     // Extraemos el token Antiforgery generado por @Html.AntiForgeryToken()
     var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-    // Enviamos los datos al controlador mediante Fetch
     fetch('/Pagos/RegistrarPagoExitoso', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    // 🔑 Añadimos el token y el monto real aprobado en el body
     body: 'pedidoId=' + @Model.Id +
     '&transaccionId=' + idTransaccion +
     '&monto=' + detallesPayPal.purchase_units[0].amount.value +
@@ -53,20 +50,13 @@
     });
     });
     },
-
-    // 3. 🔑 EL ANTÍDOTO ANTICRASH CON CONTROL DE INVENTARIO
     onError: function (err) {
     console.error("PayPal de prueba interceptó un fallo o rechazo de tarjeta. Revirtiendo stock...", err);
-
-    // 🚀 FETCH DE EMERGENCIA: Mandamos a llamar a la acción para liberar el stock en la base de datos
     fetch('/Pagos/CancelarPedido?pedidoId=' + @Model.Id, {
     method: 'POST'
     })
     .then(response => {
-    // Notificamos al usuario de forma elegante sin colapsar el navegador
     alert('❌ La simulación falló o fue cancelada. El pedido ha sido anulado y los cosméticos se reincorporaron al inventario.');
-
-    // Redirigimos de vuelta pacíficamente al carrito
     window.location.href = '/Carrito/Index';
     })
     .catch(error => {
